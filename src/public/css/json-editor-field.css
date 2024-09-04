@@ -76,7 +76,7 @@
 
 
 
-.json-editor-field__content {
+.json-editor-field__content, .json-editor-field__content-child {
     display: flex;
 }
 

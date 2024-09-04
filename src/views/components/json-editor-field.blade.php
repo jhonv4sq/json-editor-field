@@ -38,5 +38,6 @@
 @endpush
 
 @push('scripts')
+    <script src="{{ asset('vendor/json-form/json-editor-field/js/json-editor.js') }}"></script>
     <script src="{{ asset('vendor/json-form/json-editor-field/js/json-editor-field.js') }}"></script>
 @endpush
