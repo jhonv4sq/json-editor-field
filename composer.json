@@ -1,0 +1,28 @@
+{
+    "name": "json-form/json-editor-field",
+    "description": "This package provides a custom form field for Laravel that allows users to edit JSON in an easy and intuitive manner. It includes real-time validation and a clean user interface that ensures the JSON entered is valid before submission. Ideal for applications that require direct manipulation of JSON structures by end-users.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "JsonForm\\JsonEditorField\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "JsonForm\\JsonEditorField\\JsonEditorFieldServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "Jhon Vasquez"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "illuminate/support": ">=8.0"
+    },
+    "scripts": {}
+}
