@@ -132,3 +132,15 @@
 .json-editor-field__content-array::after {
     content: ']';
 }
+
+.json-editor-field__content-array .json-editor-field__content-child.json-editor-field__content-array-selected {
+    cursor: move;
+}
+
+.json-editor-field__content-array .json-editor-field__content-child.json-editor-field__content-array-ghost {
+
+}
+
+.json-editor-field__content-array .json-editor-field__content-child.json-editor-field__content-array-drag {
+    opacity: 0;
+}

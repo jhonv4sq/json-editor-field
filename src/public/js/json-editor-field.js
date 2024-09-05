@@ -29,7 +29,7 @@ const printTextarea = (textarea, values) => {
     let textValues = [false, values]
     textarea.addEventListener("keyup", (e) => {
         try {
-            
+
             let jsonValues = JSON.parse(e.target.value)
 
             if (jsonValues != values) {
@@ -49,12 +49,6 @@ const printTextarea = (textarea, values) => {
             textarea.value = JSON.stringify(textValues[1], null, 2)
         }
     })
-}
-
-const changeValue = (values) => {
-    let textarea = document.getElementById("json-editor-field__textarea").querySelector("textarea")
-    textarea.valuetextarea.value = JSON.stringify(values, null, 2)
-    printValues(values)
 }
 
 document.addEventListener("DOMContentLoaded", function () {

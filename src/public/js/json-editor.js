@@ -13,8 +13,15 @@ const checkIfOject = (value) => {
     }
 }
 
+const changeValue = (values) => {
+    let string = JSON.stringify(values, null, 2)
+    let textarea = document.getElementById("json-editor-field__textarea").querySelector("textarea")
+    textarea.value = string
+    printValues(values)
+}
+
 // Muestra los json
-const printOjectValue = (key, value, child = '') => {
+const printOjectValue = (key, value, oldKeys = '', child = '') => {
     let div = document.createElement('div')
     div.classList.add(`json-editor-field__content${child}`)
 
@@ -40,36 +47,48 @@ const printOjectValue = (key, value, child = '') => {
         div.appendChild(spanValue)
     }
 
+    let AddKey = `${key}`
+    if (child != '') {
+        AddKey = `.${key}`
+    }
+
     if (checkIfOject(value) == false) {
+        oldKeys += AddKey
         let divValue = document.createElement('div')
         divValue.classList.add('json-editor-field__content-array')
+        divValue.setAttribute('data-id', `${oldKeys}`)
 
-        value.forEach((v) => {
-            let divArray = printArrayValue(v, '-child')
+        value.forEach((v, k) => {
+            let divArray = printArrayValue(k, v, oldKeys, '-child')
             divValue.appendChild(divArray)
         })
         div.appendChild(divValue)
+        oldKeys -= AddKey
     }
 
     if (checkIfOject(value) == true) {
+        oldKeys += AddKey
         let divValue = document.createElement('div')
         divValue.classList.add('json-editor-field__content-json')
-
+        divValue.setAttribute('data-id', `${oldKeys}`)
+        
         Object.entries(value).forEach(([k, v]) => {
-            let divJson = printOjectValue(k, v, '-child')
+            let divJson = printOjectValue(k, v, oldKeys,  '-child')
             divValue.appendChild(divJson)
         })
 
         div.appendChild(divValue)
+        oldKeys -= AddKey
     }
 
     return div
 }
 
 // Muestra los array
-const printArrayValue = (value, child = '') => {
+const printArrayValue = (key, value, oldKeys = '', child = '') => {
     let div = document.createElement('div')
     div.classList.add(`json-editor-field__content${child}`)
+    div.setAttribute('data-id', `${key}`)
 
     if (['string', 'number'].includes(checkIfOject(value))) {
         let span = document.createElement('span')
@@ -86,49 +105,106 @@ const printArrayValue = (value, child = '') => {
         div.appendChild(span)
     }
 
+    let AddKey = `${key}`
+    if (child != '') {
+        AddKey = `.${key}`
+    }
+
     if (checkIfOject(value) == false) {
+        oldKeys += AddKey
         let divValue = document.createElement('div')
         divValue.classList.add('json-editor-field__content-array')
+        divValue.setAttribute('data-id', `${oldKeys}`)
 
-        value.forEach((v) => {
-            let divArray = printArrayValue(v, '-child')
+        value.forEach((v, k) => {
+            let divArray = printArrayValue(k, v, oldKeys, '-child')
             divValue.appendChild(divArray)
         })
         div.appendChild(divValue)
+        oldKeys -= AddKey
     }
 
     if (checkIfOject(value) == true) {
+        oldKeys += AddKey
         let divValue = document.createElement('div')
         divValue.classList.add('json-editor-field__content-json')
+        divValue.setAttribute('data-id', `${oldKeys}`)
 
         Object.entries(value).forEach(([k, v]) => {
-            let divJson = printOjectValue(k, v, '-child')
+            let divJson = printOjectValue(k, v, '', '-child')
             divValue.appendChild(divJson)
         })
         div.appendChild(divValue)
+        oldKeys -= AddKey
     }
 
     return div
 }
 
+const changArrayOrder = (current, order) => {
+    let newArray = new Array(current.length)
+
+    order.forEach((value, index) => {
+        // console.log('original positin:'+value+' change to:'+index+ ' value:'+ current[value])
+        newArray[index] = current[value]
+    })
+    return newArray
+}
+
 // Muestra todos los valores
 const printValues = (values) => {
+
     let div = document.getElementById("json-editor-field__json")
+
+    let oldKeys = ""
 
     if (checkIfOject(values) == true) {
         div.innerHTML = ""
         Object.entries(values).forEach(([key, value]) => {
-            let divChild = printOjectValue(key, value)
+            let divChild = printOjectValue(key, value, oldKeys)
             div.appendChild(divChild)
         })
     }
 
     if (checkIfOject(values) == false) {
         div.innerHTML = ""
-        values.forEach((value) => {
-            let divChind = printArrayValue(value)
+        values.forEach((value, key) => {
+            let divChind = printArrayValue(key, value, oldKeys)
             div.appendChild(divChind)
         })
     }
-}
 
+    let allArrays = div.querySelectorAll('.json-editor-field__content-array')
+
+    allArrays.forEach((array) => {
+        let groupName = ''
+        Sortable.create(array, {
+            animation: 150,
+            chosenClass: "json-editor-field__content-array-selected",
+            // ghostClass: "json-editor-field__content-array-ghost",
+            dragClass: "json-editor-field__content-array-drag",
+
+            onEnd: (e) => {
+                groupName = e.target.getAttribute("data-id")
+            },
+            // group: 'hola',
+            store: {
+                set: (Sortable) => {
+                    let current = values
+                    const order = Sortable.toArray()
+                    let keys = groupName.split('.')
+
+                    keys.forEach((key, index) => {
+                        if (index === keys.length - 1) {
+                            current[key] = changArrayOrder(current[key], order)
+                        } else {
+                            current = current[key]
+                        }
+                    })
+                    changeValue(values)
+                }
+            }
+
+        })
+    })
+}

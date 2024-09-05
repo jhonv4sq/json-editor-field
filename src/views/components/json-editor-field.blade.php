@@ -38,6 +38,7 @@
 @endpush
 
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="{{ asset('vendor/json-form/json-editor-field/js/json-editor.js') }}"></script>
     <script src="{{ asset('vendor/json-form/json-editor-field/js/json-editor-field.js') }}"></script>
 @endpush
