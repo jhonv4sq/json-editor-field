@@ -22,7 +22,7 @@
 
     <div class="json-editor-field__body">
 
-        <div id="json-editor-field__json" class="json-editor-field__json">
+        <div id="json-editor-field__json" class="json-editor-field__data">
         </div>
 
         <div id="json-editor-field__textarea" class="json-editor-field__textarea json-editor-field__hidden">
@@ -39,6 +39,6 @@
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-    <script src="{{ asset('vendor/json-form/json-editor-field/js/json-editor.js') }}"></script>
-    <script src="{{ asset('vendor/json-form/json-editor-field/js/json-editor-field.js') }}"></script>
+    <script src="{{ asset('vendor/json-form/json-editor-field/js/json-editor-functions.js') }}"></script>
+    <script src="{{ asset('vendor/json-form/json-editor-field/js/json-editor-init.js') }}"></script>
 @endpush
